@@ -1,65 +1,88 @@
 # FastAPI Tasks API
 
-Esta es una **API REST básica** desarrollada con **FastAPI** como proyecto de portafolio. Su objetivo es mostrar el funcionamiento de una API sencilla para la gestión de tareas, aplicando validación de datos, manejo de errores y documentación automática.
-
-La API trabaja con un **almacenamiento en memoria**, por lo que no utiliza base de datos. Esto permite centrarse en la lógica de los endpoints y en el flujo de datos.
+API REST desarrollada con **FastAPI** como proyecto de práctica y portafolio.  
+El proyecto muestra cómo construir una API sencilla para la gestión de tareas y cómo ejecutarla dentro de un contenedor Docker usando un Dockerfile básico.
 
 ---
 
-## ¿Cómo funciona la API?
+## Descripción de la API
 
-La API gestiona tareas mediante operaciones CRUD (Crear, Leer, Actualizar y Eliminar).  
+La API permite gestionar tareas mediante operaciones CRUD (Crear, Leer, Actualizar y Eliminar).
+
 Cada tarea contiene la siguiente información:
 
-- **title**: título de la tarea  
-- **description**: descripción opcional  
-- **completed**: indica si la tarea está completada  
-- **priority**: prioridad de la tarea (`alta`, `media` o `baja`)  
-- **id**: identificador único asignado automáticamente  
+- `id`: identificador único asignado automáticamente
+- `title`: título de la tarea
+- `description`: descripción opcional
+- `completed`: indica si la tarea está completada
+- `priority`: prioridad de la tarea (`alta`, `media`, `baja`)
 
-Las tareas se guardan temporalmente en memoria mientras el servidor está en ejecución.
+Las tareas se almacenan **en memoria**, por lo que no se utiliza base de datos.  
+Esto permite centrarse en la lógica de la API y en el manejo de los endpoints.
 
 ---
 
-## Endpoints disponibles
+## Funcionalidades
 
-### Crear una tarea
-**POST** `/tasks`  
-Crea una nueva tarea y asigna automáticamente un `id`.
+- Crear nuevas tareas
+- Listar todas las tareas
+- Filtrar tareas por estado (`completed`) y prioridad (`priority`)
+- Obtener una tarea específica por su identificador
+- Actualizar tareas existentes
+- Eliminar tareas
 
-### Listar tareas
-**GET** `/tasks`  
-Devuelve todas las tareas almacenadas.  
-Permite filtrar por:
-- `completed`
-- `priority`
+---
 
-### Obtener tarea por ID
-**GET** `/tasks/{id}`  
-Devuelve una tarea específica según su identificador.
+## Endpoints principales
 
-### Actualizar una tarea
-**PUT** `/tasks/{id}`  
-Actualiza completamente una tarea existente.
+- **POST** `/tasks`  
+  Crea una nueva tarea.
 
-### Eliminar una tarea
-**DELETE** `/tasks/{id}`  
-Elimina una tarea por su identificador.
+- **GET** `/tasks`  
+  Devuelve todas las tareas. Permite filtros opcionales.
+
+- **GET** `/tasks/{id}`  
+  Devuelve una tarea según su ID.
+
+- **PUT** `/tasks/{id}`  
+  Actualiza una tarea existente.
+
+- **DELETE** `/tasks/{id}`  
+  Elimina una tarea.
 
 ---
 
 ## Tecnologías utilizadas
 
-- Python 3
+- Python 3.11
 - FastAPI
 - Pydantic
 - Uvicorn
+- Docker
 
 ---
 
-## Cómo ejecutar el proyecto
+## Docker
+
+El proyecto incluye un archivo `Dockerfile` que define cómo se construye la imagen Docker de la API.
+
+### ¿Qué hace el Dockerfile?
+
+El Dockerfile realiza los siguientes pasos:
+
+1. Usa la imagen base `python:3.11-slim`.
+2. Define `/app` como el directorio de trabajo dentro del contenedor.
+3. Instala las dependencias necesarias para ejecutar la API.
+4. Copia el archivo de la aplicación al contenedor.
+5. Ejecuta el servidor Uvicorn exponiendo la API en el puerto 8000.
+
+---
+
+## Ejecutar la API con Docker
+
+### 1️⃣ Construir la imagen
+
+Desde la raíz del proyecto, donde se encuentra el `Dockerfile`, ejecutar:
 
 ```bash
-pip install -r requirements.txt
-uvicorn main:app --reload
-
+docker build -t fastapi-tasks-api .
